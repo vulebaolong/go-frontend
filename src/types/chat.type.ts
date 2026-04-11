@@ -2,17 +2,23 @@ import { TBaseTimestamps } from "./base.type";
 import { TUser } from "./user.type";
 
 export type TAllmessage = {
+    id: number;
+    chatGroupId: number;
+    senderId: number;
     messageText: string;
-    userIdSender: string;
-    chatGroupId: string;
     createdAt: string;
+    updatedAt: string;
+    edges: {
+        ChatGroups: TChatGroup;
+        Users: TUser;
+    };
 };
 
 export type TMessageItem = {
     message: string;
     avatar: string | undefined;
     fullName: string | undefined;
-    userId: string;
+    userId: number;
     roleId: string;
     createdAt: string;
 };
@@ -23,7 +29,7 @@ export type TStateChat = {
     chatGroupMembers: TStateChatMember[];
 };
 export type TStateChatMember = {
-    userId: string;
+    userId: number;
     fullName: TUser["fullName"];
     avatar: TUser["avatar"];
     roleId: string;

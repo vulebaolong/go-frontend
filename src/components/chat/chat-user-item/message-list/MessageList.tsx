@@ -14,7 +14,7 @@ import ScrollToBottom from "./ScrollToBottom";
 
 type TProps = {
     stateChat: TStateChat;
-    dataSendMessage: TAllmessage;
+    dataSendMessage?: TAllmessage;
 };
 
 export default function MessageList({ stateChat, dataSendMessage }: TProps) {
@@ -69,7 +69,7 @@ export default function MessageList({ stateChat, dataSendMessage }: TProps) {
         if (!dataSendMessage?.chatGroupId) return;
 
         // 👉 Nếu bạn gửi => luôn scroll
-        if (dataSendMessage.userIdSender === user?.id) {
+        if (dataSendMessage.senderId === user?.id) {
             shouldScrollRef.current = true;
         }
         // 👉 Nếu người khác gửi và bạn đang ở cuối => scroll
@@ -119,16 +119,16 @@ export default function MessageList({ stateChat, dataSendMessage }: TProps) {
                 firstItemIndex={firstItemIndex}
                 style={{ height: "100%" }}
                 itemContent={(index, messageItem: TAllmessage) => {
-                    const userRecipient = stateChat.chatGroupMembers.find((member) => member.userId === messageItem.userIdSender);
+                    const userRecipient = stateChat.chatGroupMembers.find((member) => member.userId === messageItem.senderId);
                     return (
                         <Fragment key={index}>
-                            {messageItem.userIdSender === user?.id ? (
+                            {messageItem.senderId === user?.id ? (
                                 <SenderMessageItem
                                     messageItem={{
                                         avatar: user?.avatar,
                                         message: messageItem.messageText,
                                         createdAt: messageItem.createdAt || "",
-                                        userId: messageItem.userIdSender,
+                                        userId: messageItem.senderId,
                                         roleId: user.roleId || "",
                                         fullName: user?.fullName,
                                     }}
@@ -140,7 +140,7 @@ export default function MessageList({ stateChat, dataSendMessage }: TProps) {
                                         fullName: userRecipient?.fullName,
                                         message: messageItem.messageText,
                                         createdAt: messageItem.createdAt || "",
-                                        userId: userRecipient?.userId || "",
+                                        userId: userRecipient?.userId || 0,
                                         roleId: userRecipient?.roleId || "",
                                     }}
                                 />

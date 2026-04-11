@@ -36,6 +36,7 @@ export const ENDPOINT = {
     USER: `user`,
     ELASTIC_SEARCH: `elastic-search`,
     CHAT_GROUP: `chat-group`,
+    CHAT_GROUP_MEMBER: `chat-group-member`,
     CHAT_GROUP_BY_TOKEN: `chat-group-by-token`,
     UPLOAD_AVATAR_LOCAL: `user/avatar-local`,
     UPLOAD_AVATAR_CLOUD: `user/avatar-cloud`,

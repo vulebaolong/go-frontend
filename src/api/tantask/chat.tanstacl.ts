@@ -28,9 +28,10 @@ export const useGetChatMessage = (payload: TPayloadTable) => {
         queryFn: async () => {
             const { pagination, filters, sort } = payload;
             const { pageIndex, pageSize } = pagination;
+            const chatGroupId = filters?.chatGroupId ? String(filters.chatGroupId) : "";
             const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
-            const { data, status, message } = await getGetChatMessageAction(query);
+            const { data, status, message } = await getGetChatMessageAction(query, chatGroupId);
             if (status === "error" || data === null) throw new Error(message);
 
             console.log({ useGetChatMessage: data });

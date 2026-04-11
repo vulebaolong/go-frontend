@@ -43,12 +43,14 @@ class APIClient {
         };
 
         const cookieHeader = await getCookieHeader();
+        const chatGroupHeaders = this.getChatGroupHeaders(url, body, headers);
 
         const optionFetch: any = {
             ...restOptions,
             headers: {
                 ...contentType,
                 ...headers,
+                ...chatGroupHeaders,
                 cookie: cookieHeader,
             },
             body: handleBody(),
@@ -147,6 +149,64 @@ class APIClient {
         } catch (error) {
             console.log(error);
             return null;
+        }
+    }
+
+    private getChatGroupHeaders(url: string, body?: any, headers?: HeadersInit) {
+        // console.log({url, body, headers});
+
+        if (!this.isChatGroupScopedUrl(url) || this.hasChatGroupHeader(headers)) return {};
+
+        const chatGroupId = this.getChatGroupIdFromBody(body) || this.getChatGroupIdFromUrl(url);
+        if (!chatGroupId) return {};
+
+        return { "chat-group-id": chatGroupId };
+    }
+
+    private isChatGroupScopedUrl(url: string) {
+        const pathname = url.split("?")[0];
+        return (
+            pathname === ENDPOINT.CHAT_MESSAGE ||
+            pathname.startsWith(`${ENDPOINT.CHAT_MESSAGE}/`) ||
+            pathname === ENDPOINT.CHAT_GROUP_MEMBER ||
+            pathname.startsWith(`${ENDPOINT.CHAT_GROUP_MEMBER}/`)
+        );
+    }
+
+    private hasChatGroupHeader(headers?: HeadersInit) {
+        if (!headers) return false;
+
+        if (headers instanceof Headers) return headers.has("chat-group-id");
+
+        if (Array.isArray(headers)) return headers.some(([key]) => key.toLowerCase() === "chat-group-id");
+
+        return Object.keys(headers).some((key) => key.toLowerCase() === "chat-group-id");
+    }
+
+    private getChatGroupIdFromBody(body?: any) {
+        if (!body || body instanceof FormData) return "";
+
+        if (typeof body === "object" && body.chatGroupId) return String(body.chatGroupId);
+
+        return "";
+    }
+
+    private getChatGroupIdFromUrl(url: string) {
+        const query = url.split("?")[1];
+        if (!query) return "";
+
+        const searchParams = new URLSearchParams(query);
+        const chatGroupId = searchParams.get("chatGroupId");
+        if (chatGroupId) return chatGroupId;
+
+        const filters = searchParams.get("filters");
+        if (!filters) return "";
+
+        try {
+            const parsedFilters = JSON.parse(filters);
+            return parsedFilters?.chatGroupId ? String(parsedFilters.chatGroupId) : "";
+        } catch {
+            return "";
         }
     }
 }

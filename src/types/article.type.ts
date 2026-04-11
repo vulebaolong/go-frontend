@@ -11,7 +11,7 @@ export type TArticle = {
     userId: string;
     isPublish: boolean;
     edges: {
-        user: TUser;
+        Users: TUser;
     };
     reaction: TReactionType | null;
 } & TBaseTimestamps;
