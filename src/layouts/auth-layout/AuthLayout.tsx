@@ -8,12 +8,29 @@ type TProps = {
     children: ReactNode;
 };
 
+export function isWebGLAvailable() {
+    try {
+        const canvas = document.createElement("canvas");
+        return !!(window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")));
+    } catch {
+        return false;
+    }
+}
+
 export default function AuthLayout({ children }: TProps) {
     const [showParticles, setShowParticles] = useState(true);
+    const [canUseWebGL, setCanUseWebGL] = useState(false);
 
-    useEffect(() => {
+   useEffect(() => {
+        const webglOk = isWebGLAvailable();
+        setCanUseWebGL(webglOk);
+
         const saved = localStorage.getItem("showParticles");
-        if (saved !== null) setShowParticles(saved === "true");
+        if (saved !== null) {
+            setShowParticles(saved === "true" && webglOk);
+        } else {
+            setShowParticles(webglOk);
+        }
     }, []);
 
     useEffect(() => {
@@ -29,7 +46,7 @@ export default function AuthLayout({ children }: TProps) {
                 position: "relative",
             }}
         >
-            {showParticles && <ThreeBackgroundParticle />}
+            {canUseWebGL && showParticles && <ThreeBackgroundParticle />}
 
             {children}
 

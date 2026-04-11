@@ -125,18 +125,21 @@ export class LogWithColor {
 export const logWithColor = new LogWithColor();
 
 export function buildInitialValues(fields: TFieldCreate[]) {
-    return fields.reduce((acc, field) => {
-        if (field.type === "number") {
-            acc[field.name] = 0;
-        } else if (field.type === "tags") {
-            acc[field.name] = [];
-        } else if (field.type === "select" && field.dataTags?.some((item: any) => item.value === "true" || item.value === "false")) {
-            acc[field.name] = false;
-        } else {
-            acc[field.name] = "";
-        }
-        return acc;
-    }, {} as Record<string, any>);
+    return fields.reduce(
+        (acc, field) => {
+            if (field.type === "number") {
+                acc[field.name] = 0;
+            } else if (field.type === "tags") {
+                acc[field.name] = [];
+            } else if (field.type === "select" && field.dataTags?.some((item: any) => item.value === "true" || item.value === "false")) {
+                acc[field.name] = false;
+            } else {
+                acc[field.name] = "";
+            }
+            return acc;
+        },
+        {} as Record<string, any>,
+    );
 }
 
 export function buildValidationSchema(fields: TFieldCreate[]) {
@@ -211,3 +214,5 @@ export function hexToRgba(hex: string, alpha: number) {
 
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
+
+

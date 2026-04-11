@@ -9,24 +9,31 @@ import { useEffect, useState } from "react";
 import FooterAuth from "../footer/FooterAuth";
 import LoginForm from "./login-form/LoginForm";
 import LoginGoogleAuthenticator from "./login-ga/LoginGa";
-// import { useGoogleOneTapLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function Login() {
-    //   useGoogleOneTapLogin({
-    //       onSuccess: (credentialResponse) => {
-    //           console.log(credentialResponse);
-    //       },
-    //       onError: () => {
-    //           console.log("Login Failed");
-    //       },
-    //   });
-   //  const info = useAppSelector((state) => state.user.info);
-   //  const { response, history } = useGoogleOneTapLogin(!!info);
-   //  console.log({ response, history });
-
     const [step, setStep] = useState<TStepLogin>("login-form");
     const [payloadLogin, setPayloadLogin] = useState<TPayloadLoginGoogleAuthenticator | null>(null);
     const emailGa = useAppSelector((state) => state.ga.email);
+
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        const error = searchParams.get("error");
+
+        if (error) {
+            toast.error(error);
+
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete("error");
+
+            const query = params.toString();
+            router.replace(query ? `${pathname}?${query}` : pathname);
+        }
+    }, [searchParams, router, pathname]);
 
     useEffect(() => {
         if (!emailGa) return;

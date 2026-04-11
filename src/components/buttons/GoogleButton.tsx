@@ -7,7 +7,7 @@ import { Button, ButtonProps } from "@mantine/core";
 // import { ROUTER_CLIENT } from "../../../constant/router.constant";
 // import { toast } from "react-toastify";
 // import { resError } from "../../../helpers/function.helper";
-import { NEXT_PUBLIC_BASE_DOMAIN_BE_API } from "@/constant/app.constant";
+import { NEXT_PUBLIC_BASE_DOMAIN_BE_API, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { useState } from "react";
 
 function GoogleIcon(props: React.ComponentPropsWithoutRef<"svg">) {
@@ -42,38 +42,13 @@ function GoogleIcon(props: React.ComponentPropsWithoutRef<"svg">) {
 export function GoogleButton(props: ButtonProps & React.ComponentPropsWithoutRef<"button">) {
     const [loading, setLoading] = useState(false);
 
-    //  const loginGoogle = useLoginGoogle();
-    //  const router = useRouter();
-    //  const login = useGoogleLogin({
-    //      flow: "auth-code",
-    //      onSuccess: async (codeResponse) => {
-    //          console.log(`Dữ liệu google trả về:`, codeResponse);
-    //          loginGoogle.mutate(
-    //              { code: codeResponse.code },
-    //              {
-    //                  onSuccess: () => {
-    //                      router.push(ROUTER_CLIENT.HOME);
-    //                      toast.success(`Login successfully`);
-    //                  },
-    //                  onSettled: () => {
-    //                      setLoading(false);
-    //                  },
-    //              }
-    //          );
-    //      },
-    //      onError: (errorResponse) => {
-    //          setLoading(false);
-    //          console.log(errorResponse);
-    //      },
-    //  });
-
     return (
         <Button
             loading={loading}
             onClick={() => {
                 setLoading(true);
                 // login();
-                window.location.href = `${NEXT_PUBLIC_BASE_DOMAIN_BE_API}/auth/google`;
+                window.location.href = `${NEXT_PUBLIC_BASE_DOMAIN_BE_API}/auth/google/login?redirect=${NEXT_PUBLIC_BASE_DOMAIN_FE}`;
             }}
             leftSection={<GoogleIcon />}
             variant="default"

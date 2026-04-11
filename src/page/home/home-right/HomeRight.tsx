@@ -37,11 +37,11 @@ export default function HomeRight({ onClose }: TProps) {
             {
                 chatGroupId: chatGroup.id,
                 chatGroupName: chatGroup.name || "",
-                chatGroupMembers: chatGroup.ChatGroupMembers.map((member) => ({
-                    avatar: member.Users.avatar,
-                    fullName: member.Users.fullName,
-                    roleId: member.Users.roleId,
-                    userId: member.Users.id,
+                chatGroupMembers: chatGroup.edges.ChatGroupMembers.map((member) => ({
+                    avatar: member.edges.Users.avatar,
+                    fullName: member.edges.Users.fullName,
+                    roleId: member.edges.Users.roleId,
+                    userId: member.edges.Users.id,
                 })),
             },
             () => {
@@ -111,11 +111,11 @@ export default function HomeRight({ onClose }: TProps) {
                         }
                     />
                     {(findAllChatGroup.data?.items || []).map((chatGroup, i) => {
-                        const user = (chatGroup?.ChatGroupMembers || []).find((user) => user.userId !== userId);
+                        const user = (chatGroup.edges?.ChatGroupMembers || []).find((user) => user.userId !== userId);
                         // console.log(user);
                         if (!user) return <Fragment key={i}></Fragment>;
 
-                        if ((chatGroup?.ChatGroupMembers?.length ?? 0) > 2) {
+                        if ((chatGroup.edges?.ChatGroupMembers?.length ?? 0) > 2) {
                             return (
                                 <Box
                                     key={i}
@@ -133,14 +133,14 @@ export default function HomeRight({ onClose }: TProps) {
                                 >
                                     <Group wrap="nowrap" gap={5}>
                                         <Box sx={{ width: `38px`, height: `38px`, position: `relative`, flexShrink: 0 }}>
-                                            {chatGroup.ChatGroupMembers.slice(0, 2).map((member, i) => {
+                                            {chatGroup.edges.ChatGroupMembers.slice(0, 2).map((member, i) => {
                                                 if (i === 0) {
                                                     return (
                                                         <Box key={i} sx={{ position: `absolute`, bottom: 0, left: 0, zIndex: 2 }}>
                                                             <Avatar
                                                                 size={`sm`}
-                                                                fullName={member.Users.fullName}
-                                                                avatar={member.Users.avatar}
+                                                                fullName={member.edges.Users.fullName}
+                                                                avatar={member.edges.Users.avatar}
                                                                 radius="xl"
                                                             />
                                                         </Box>
@@ -150,8 +150,8 @@ export default function HomeRight({ onClose }: TProps) {
                                                         <Box key={i} sx={{ position: `absolute`, top: 0, right: 0, zIndex: 1 }}>
                                                             <Avatar
                                                                 size={`sm`}
-                                                                fullName={member.Users.fullName}
-                                                                avatar={member.Users.avatar}
+                                                                fullName={member.edges.Users.fullName}
+                                                                avatar={member.edges.Users.avatar}
                                                                 radius="xl"
                                                             />
                                                         </Box>
@@ -179,7 +179,7 @@ export default function HomeRight({ onClose }: TProps) {
                                     borderRadius: `10px`,
                                 }}
                             >
-                                <TagUser fullName={user.Users?.fullName} avatar={user.Users?.avatar} />
+                                <TagUser fullName={user.edges.Users?.fullName} avatar={user.edges.Users?.avatar} />
                             </Box>
                         );
                     })}

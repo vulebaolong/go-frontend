@@ -40,10 +40,10 @@ export default function Article({ article, handleModalArticleDetail }: TProps) {
             {/* info */}
             <Group justify="space-between" wrap="nowrap" px={10} py={15}>
                 <Box style={{ flexShrink: 0 }}>
-                    <Avatar fullName={article.Users?.fullName} avatar={article.Users?.avatar} />
+                    <Avatar fullName={article.edges.user?.fullName} avatar={article.edges.user?.avatar} />
                 </Box>
                 <Stack gap={0} flex={1}>
-                    <Text fw={`bold`}>{article.Users?.fullName}</Text>
+                    <Text fw={`bold`}>{article.edges.user?.fullName}</Text>
                     <Text c={`dimmed`}>{formatLocalTime(article.createdAt, `ago`)}</Text>
                 </Stack>
 

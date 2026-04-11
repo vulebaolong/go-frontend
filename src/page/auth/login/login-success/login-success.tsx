@@ -4,10 +4,11 @@ import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { getAccessToken, getRefreshToken } from "@/helpers/cookies.helper";
 import { useAppDispatch } from "@/redux/hooks";
 import { SET_EMAIL } from "@/redux/slices/ga.slice";
+import { Loader } from "@mantine/core";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-export default function LoginCallback() {
+export default function LoginSuccess() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const dispatch = useAppDispatch();
@@ -30,5 +31,9 @@ export default function LoginCallback() {
             }
         })();
     }, []);
-    return <></>;
+    return (
+        <>
+            <Loader size={"xs"}/>
+        </>
+    );
 }

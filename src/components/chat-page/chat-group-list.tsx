@@ -49,7 +49,7 @@ export default function ChatGroupList({ setChat }: TProps) {
         setChat({
             chatGroupId: chatGroup.id,
             chatGroupName: chatGroup.name || "",
-            chatGroupMembers: (chatGroup.ChatGroupMembers as any) || [],
+            chatGroupMembers: (chatGroup.edges.ChatGroupMembers as any) || [],
         });
     };
 
@@ -73,7 +73,7 @@ export default function ChatGroupList({ setChat }: TProps) {
                         noDataComponent={<NodataOverlay visible />}
                     >
                         {chatGroups.map((chatGroup, i) => {
-                            const user = (chatGroup?.ChatGroupMembers || []).find((user) => user.userId !== userId);
+                            const user = (chatGroup.edges?.ChatGroupMembers || []).find((user) => user.userId !== userId);
                             if (!user) return <Fragment key={i}></Fragment>;
                             return (
                                 <Box
@@ -90,7 +90,7 @@ export default function ChatGroupList({ setChat }: TProps) {
                                         borderRadius: `10px`,
                                     }}
                                 >
-                                    <TagUser fullName={user.Users?.fullName} avatar={user.Users?.avatar} />
+                                    <TagUser fullName={user.edges.Users?.fullName} avatar={user.edges.Users?.avatar} />
                                 </Box>
                             );
                         })}

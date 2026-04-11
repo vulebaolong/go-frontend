@@ -10,6 +10,8 @@ export type TArticle = {
     commentCount: number;
     userId: string;
     isPublish: boolean;
-    Users: TUser;
-    reaction: TReactionType | null
+    edges: {
+        user: TUser;
+    };
+    reaction: TReactionType | null;
 } & TBaseTimestamps;
