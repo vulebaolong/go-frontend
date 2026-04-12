@@ -10,11 +10,12 @@ import { useAppDispatch } from "@/redux/hooks";
 import { SET_ARTICLE_DETAIL } from "@/redux/slices/article.slice";
 import { TArticle } from "@/types/article.type";
 import { Box, Button, Center, Group, Image, Loader, Paper, Stack, Text, Title } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconThumbUp, IconThumbUpFilled } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { CSSProperties, forwardRef, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { VirtuosoGrid, VirtuosoGridHandle } from "react-virtuoso";
+import type { GridItemProps, GridListProps } from "react-virtuoso";
 
 function getArticleTitle(article: TArticle) {
     const fallbackTitle = article.content?.split("\n").find(Boolean)?.trim();
@@ -71,16 +72,24 @@ function ArticleVoteActions({ article, liked, onToggleLike }: { article: TArticl
     };
 
     return (
-        <div className="home-v2-actions">
+        <Box
+            sx={{
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gap: 8,
+                padding: 12,
+                borderTop: "1px solid var(--mantine-color-default-border)",
+            }}
+        >
             <Button
-                className="home-v2-action-button"
+                sx={{ minWidth: 0, borderRadius: 8 }}
                 variant={liked ? "filled" : "light"}
                 leftSection={liked ? <IconThumbUpFilled size={18} /> : <IconThumbUp size={18} />}
                 onClick={handleToggleLike}
             >
                 Thích
             </Button>
-        </div>
+        </Box>
     );
 }
 
@@ -120,8 +129,45 @@ function ArticleGridCard({
     };
 
     return (
-        <Paper component="article" className="home-v2-card" radius="lg">
-            <button className="home-v2-card-button" onClick={handleOpenArticle} type="button">
+        <Paper
+            component="article"
+            radius="lg"
+            sx={(_, u) => ({
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                minHeight: 420,
+                overflow: "hidden",
+                border: "1px solid var(--mantine-color-default-border)",
+                boxShadow: "0 10px 28px rgba(0, 0, 0, 0.12)",
+                [u.light]: {
+                    background: "var(--mantine-color-white)",
+                },
+                [u.dark]: {
+                    background: "var(--mantine-color-dark-7)",
+                },
+            })}
+        >
+            <Box
+                component="button"
+                onClick={handleOpenArticle}
+                type="button"
+                sx={{
+                    flex: 1,
+                    minWidth: 0,
+                    height: "auto",
+                    padding: 0,
+                    color: "inherit",
+                    textAlign: "left",
+                    background: "transparent",
+                    border: 0,
+                    cursor: "pointer",
+                    "&:focus-visible": {
+                        outline: "2px solid var(--mantine-primary-color-filled)",
+                        outlineOffset: -2,
+                    },
+                }}
+            >
                 <Stack gap={14} p={16}>
                     <Group gap={10} wrap="nowrap">
                         <Avatar fullName={author?.fullName} avatar={author?.avatar} size={42} />
@@ -135,22 +181,40 @@ function ArticleGridCard({
                         </Box>
                     </Group>
 
-                    <Title order={3} lineClamp={2} fz="h3" lh={1.25} className="home-v2-title">
+                    <Title order={3} lineClamp={2} fz="h3" lh={1.25} style={{ minHeight: "calc(2em * 1.25)" }}>
                         {getArticleTitle(article)}
                     </Title>
 
-                    <Text c="dimmed" lineClamp={1} className="home-v2-content">
+                    <Text c="dimmed" lineClamp={1} style={{ minHeight: "1.55em", overflowWrap: "break-word" }}>
                         {article.content}
                     </Text>
                 </Stack>
 
-                <div className="home-v2-media">
+                <Box
+                    sx={(_, u) => ({
+                        width: "100%",
+                        aspectRatio: "16 / 9",
+                        overflow: "hidden",
+                        [u.light]: {
+                            background: "var(--mantine-color-gray-1)",
+                        },
+                        [u.dark]: {
+                            background: "var(--mantine-color-dark-6)",
+                        },
+                    })}
+                >
                     {article.imageUrl ? (
-                        <Image src={checkPathImage(article.imageUrl)} alt={getArticleTitle(article)} />
+                        <Image
+                            src={checkPathImage(article.imageUrl)}
+                            alt={getArticleTitle(article)}
+                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
                     ) : (
-                        <div className="home-v2-media-fallback">Chưa có hình ảnh</div>
+                        <Center w="100%" h="100%" c="dimmed" fw={600}>
+                            Chưa có hình ảnh
+                        </Center>
                     )}
-                </div>
+                </Box>
 
                 <Group justify="space-between" px={16} py={12} c="dimmed" fz="sm">
                     <Group gap={6}>
@@ -158,7 +222,7 @@ function ArticleGridCard({
                         <Text fz="sm">{likeCount} lượt thích</Text>
                     </Group>
                 </Group>
-            </button>
+            </Box>
 
             <ArticleVoteActions article={article} liked={liked} onToggleLike={handleToggleLike} />
         </Paper>
@@ -170,6 +234,7 @@ export default function Home_v2() {
     const [openedModalAticleDetail, handleModalArticleDetail] = useDisclosure(false);
     const [page, setPage] = useState(1);
     const [articles, setArticles] = useState<TArticle[]>([]);
+    const isMobile = useMediaQuery("(max-width: 48em)");
 
     const virtuosoRef = useRef<VirtuosoGridHandle>(null);
     const pageSize = 10;
@@ -200,13 +265,37 @@ export default function Home_v2() {
         setPage((prev) => prev + 1);
     };
 
+    const listStyle: CSSProperties = {
+        display: "grid",
+        gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill, minmax(280px, 1fr))",
+        gap: isMobile ? 14 : 18,
+        alignItems: "stretch",
+        paddingBottom: 18,
+    };
+
+    const GridList = forwardRef<HTMLDivElement, GridListProps>(({ style, ...props }, ref) => (
+        <div {...props} ref={ref} style={{ ...style, ...listStyle }} />
+    ));
+    GridList.displayName = "ArticleGridList";
+
+    const GridItem = forwardRef<HTMLDivElement, GridItemProps>(({ style, ...props }, ref) => (
+        <div {...props} ref={ref} style={{ ...style, minWidth: 0 }} />
+    ));
+    GridItem.displayName = "ArticleGridItem";
+
     return (
-        <Box className="home-v2-page">
-            <Stack gap={18} className="home-v2-viewport">
-                <Box>
+        <Box
+            sx={{
+                minHeight: "calc(100vh - var(--height-header))",
+                padding: isMobile ? 14 : 24,
+                background: "linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)), var(--mantine-color-body)",
+            }}
+        >
+            <Stack gap={18} style={{ position: "relative", height: `calc(100vh - var(--height-header) - ${isMobile ? 28 : 48}px)` }}>
+                {/* <Box>
                     <Title order={2}>Bài viết mới nhất</Title>
                     <Text c="dimmed">Khám phá các bài viết được chia sẻ gần đây.</Text>
-                </Box>
+                </Box> */}
 
                 <DataStateWrapper
                     isLoading={getAllArticle.isLoading && articles.length === 0}
@@ -218,17 +307,17 @@ export default function Home_v2() {
                         ref={virtuosoRef}
                         data={articles}
                         style={{ height: "100%" }}
-                        listClassName="home-v2-grid"
-                        itemClassName="home-v2-grid-item"
                         computeItemKey={(_, article) => article.id}
                         itemContent={(i, article: TArticle) => (
                             <ArticleGridCard key={article.id || i} article={article} handleModalArticleDetail={handleModalArticleDetail} />
                         )}
                         endReached={handleEndReached}
                         components={{
+                            List: GridList,
+                            Item: GridItem,
                             Footer: () =>
                                 getAllArticle.isFetching && articles.length > 0 ? (
-                                    <Center className="home-v2-footer">
+                                    <Center style={{ padding: "18px 0 4px" }}>
                                         <Loader size="sm" />
                                     </Center>
                                 ) : null,
@@ -238,125 +327,6 @@ export default function Home_v2() {
             </Stack>
 
             <ModalArticleDetail opened={openedModalAticleDetail} close={handleModalArticleDetail.close} />
-            <style jsx global>{`
-                .home-v2-page {
-                    min-height: calc(100vh - var(--height-header));
-                    padding: 24px;
-                    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)), var(--mantine-color-body);
-                }
-
-                .home-v2-viewport {
-                    position: relative;
-                    height: calc(100vh - var(--height-header) - 48px);
-                }
-
-                .home-v2-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                    gap: 18px;
-                    align-items: stretch;
-                    padding-bottom: 18px;
-                }
-
-                .home-v2-grid-item {
-                    min-width: 0;
-                }
-
-                .home-v2-card {
-                    display: flex;
-                    flex-direction: column;
-                    height: 100%;
-                    min-height: 420px;
-                    overflow: hidden;
-                    border: 1px solid var(--mantine-color-default-border);
-                    background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
-                    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
-                }
-
-                .home-v2-card-button {
-                    flex: 1;
-                    min-width: 0;
-                    height: auto;
-                    padding: 0;
-                    color: inherit;
-                    text-align: left;
-                    background: transparent;
-                    border: 0;
-                    cursor: pointer;
-                }
-
-                .home-v2-card-button:focus-visible {
-                    outline: 2px solid var(--mantine-primary-color-filled);
-                    outline-offset: -2px;
-                }
-
-                .home-v2-title {
-                    min-height: calc(2em * 1.25);
-                }
-
-                .home-v2-content {
-                    min-height: 1.55em;
-                    overflow-wrap: break-word;
-                }
-
-                .home-v2-media {
-                    width: 100%;
-                    aspect-ratio: 16 / 9;
-                    overflow: hidden;
-                    background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
-                }
-
-                .home-v2-media img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-
-                .home-v2-media-fallback {
-                    display: grid;
-                    width: 100%;
-                    height: 100%;
-                    place-items: center;
-                    color: var(--mantine-color-dimmed);
-                    font-weight: 600;
-                }
-
-                .home-v2-actions {
-                    display: grid;
-                    grid-template-columns: 1fr;
-                    gap: 8px;
-                    padding: 12px;
-                    border-top: 1px solid var(--mantine-color-default-border);
-                }
-
-                .home-v2-action-button {
-                    min-width: 0;
-                    border-radius: 8px;
-                }
-
-                .home-v2-footer {
-                    padding: 18px 0 4px;
-                }
-
-                @media (max-width: 48em) {
-                    .home-v2-page {
-                        padding: 14px;
-                    }
-
-                    .home-v2-viewport {
-                        height: calc(100vh - var(--height-header) - 28px);
-                    }
-
-                    .home-v2-grid {
-                        grid-template-columns: 1fr;
-                        gap: 14px;
-                    }
-
-                    .home-v2-card {
-                        min-height: 380px;
-                    }
-                }
-            `}</style>
         </Box>
     );
 }
