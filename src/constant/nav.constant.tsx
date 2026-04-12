@@ -26,25 +26,25 @@ export const NAV_ITEMS: NavConfigItem[] = [
         icon: <IconMessage size={ICON_SIZE} />,
         href: ROUTER_CLIENT.CHAT,
     },
-    {
-        label: "Data Management",
-        icon: <IconDimensions size={ICON_SIZE} />,
-        children: [
-            {
-                label: "Upload Data",
-                icon: <IconUpload size={ICON_SIZE} />,
-                href: ROUTER_CLIENT.DATA_MANAGEMENT.UPLOAD_DATA,
-            },
-            {
-                label: "Dimensions",
-                icon: <IconDatabaseImport size={ICON_SIZE} />,
-                href: ROUTER_CLIENT.DATA_MANAGEMENT.DIMENSIONS,
-            },
-            {
-                label: "SKU Master",
-                icon: <IconTags size={ICON_SIZE} />,
-                href: ROUTER_CLIENT.DATA_MANAGEMENT.SKU_MASTER,
-            },
-        ],
-    },
+    // {
+    //     label: "Data Management",
+    //     icon: <IconDimensions size={ICON_SIZE} />,
+    //     children: [
+    //         {
+    //             label: "Upload Data",
+    //             icon: <IconUpload size={ICON_SIZE} />,
+    //             href: ROUTER_CLIENT.DATA_MANAGEMENT.UPLOAD_DATA,
+    //         },
+    //         {
+    //             label: "Dimensions",
+    //             icon: <IconDatabaseImport size={ICON_SIZE} />,
+    //             href: ROUTER_CLIENT.DATA_MANAGEMENT.DIMENSIONS,
+    //         },
+    //         {
+    //             label: "SKU Master",
+    //             icon: <IconTags size={ICON_SIZE} />,
+    //             href: ROUTER_CLIENT.DATA_MANAGEMENT.SKU_MASTER,
+    //         },
+    //     ],
+    // },
 ];

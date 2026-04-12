@@ -12,11 +12,9 @@ import { TArticle } from "@/types/article.type";
 import { Box, Button, Center, Group, Image, Loader, Paper, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconThumbUp, IconThumbUpFilled } from "@tabler/icons-react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { VirtuosoGrid, VirtuosoGridHandle } from "react-virtuoso";
-
 
 function getArticleTitle(article: TArticle) {
     const fallbackTitle = article.content?.split("\n").find(Boolean)?.trim();
@@ -31,17 +29,8 @@ function getReactionCount(article: TArticle) {
     return article.likeCount || 0;
 }
 
-function ArticleVoteActions({
-    article,
-    liked,
-    onToggleLike,
-}: {
-    article: TArticle;
-    liked: boolean;
-    onToggleLike: (liked: boolean) => void;
-}) {
+function ArticleVoteActions({ article, liked, onToggleLike }: { article: TArticle; liked: boolean; onToggleLike: (liked: boolean) => void }) {
     const toggleArticleLike = useToggleArticleLike();
-    const queryClient = useQueryClient();
     const committedLikedRef = useRef(false);
     const pendingLikedRef = useRef(false);
     const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -108,7 +97,7 @@ function ArticleGridCard({
 }) {
     const dispatch = useAppDispatch();
     const author = getArticleAuthor(article);
-    const [liked, setLiked] = useState(false);
+    const [liked, setLiked] = useState((article.edges.ArticleLikes?.length || 0) > 0);
     const [likeCount, setLikeCount] = useState(getReactionCount(article));
 
     useEffect(() => {
@@ -253,9 +242,7 @@ export default function Home_v2() {
                 .home-v2-page {
                     min-height: calc(100vh - var(--height-header));
                     padding: 24px;
-                    background:
-                        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
-                        var(--mantine-color-body);
+                    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)), var(--mantine-color-body);
                 }
 
                 .home-v2-viewport {
