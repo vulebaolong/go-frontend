@@ -51,6 +51,7 @@ export const ENDPOINT = {
     ARTICLE_ALL: "article",
     ARTICLE_MY: "article/my",
     ARTICLE_OTHER: "article/other",
+    ARTICLE_LIKE_TOGGLE: "article-like/toggle",
     REACTION_ARTICLE: {
         CREATE: "reaction-article",
         GET_LIST: "reaction-article",

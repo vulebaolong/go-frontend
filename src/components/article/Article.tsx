@@ -9,7 +9,6 @@ import { IconMessageCircle, IconShare3 } from "@tabler/icons-react";
 import Avatar from "../avatar/Avatar";
 import { background1 } from "../provider/mantine/sx/background.sx";
 import TextContent from "../text-content/TextContent";
-import ButtonLike from "./button-like/ButtonLike";
 
 type TProps = {
     article: TArticle;
@@ -85,7 +84,7 @@ export default function Article({ article, handleModalArticleDetail }: TProps) {
 
             {/* control */}
             <Group px={10} py={10} justify="space-around">
-                <ButtonLike article={article} />
+                {/* <ButtonLike article={article} /> */}
                 <Button onClick={handleClickComment} flex={1} leftSection={<IconMessageCircle size={20} />} variant="subtle">
                     Bình Luận
                 </Button>

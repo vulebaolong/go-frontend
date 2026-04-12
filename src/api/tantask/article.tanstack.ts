@@ -1,4 +1,4 @@
-import { createArticleAction, getAllArticleAction, getMyArticleAction, getOtherArticleAction } from "@/api/actions/article.action";
+import { createArticleAction, getAllArticleAction, getMyArticleAction, getOtherArticleAction, toggleArticleLikeAction } from "@/api/actions/article.action";
 import { TPayloadTable } from "@/components/custom/table/TableCustom";
 import { buildQueryString } from "@/helpers/build-query";
 import { TQuery } from "@/types/app.type";
@@ -57,6 +57,16 @@ export const useCreateArticle = () => {
     return useMutation({
         mutationFn: async (payload: FormData) => {
             const { data, status, message } = await createArticleAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            return data;
+        },
+    });
+};
+
+export const useToggleArticleLike = () => {
+    return useMutation({
+        mutationFn: async (articleId: number) => {
+            const { data, status, message } = await toggleArticleLikeAction(articleId);
             if (status === "error" || data === null) throw new Error(message);
             return data;
         },

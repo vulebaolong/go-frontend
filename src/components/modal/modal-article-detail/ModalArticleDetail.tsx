@@ -1,6 +1,6 @@
 import Article from "@/components/article/Article";
-import CommentInput from "@/components/comment/comment-input/CommentInput";
-import CommentList from "@/components/comment/CommentList";
+// import CommentInput from "@/components/comment/comment-input/CommentInput";
+// import CommentList from "@/components/comment/CommentList";
 import { useAppSelector } from "@/redux/hooks";
 import { TListComment } from "@/types/comment.type";
 import { Box, Modal } from "@mantine/core";
@@ -47,9 +47,9 @@ export default function ModalArticleDetail({ opened, close }: TProps) {
                 }}
             >
                 {articleDetail && <Article article={articleDetail} />}
-                {articleDetail && <CommentList article={articleDetail} listComment={listComment} setListComment={setListComment} />}
+                {/* {articleDetail && <CommentList article={articleDetail} listComment={listComment} setListComment={setListComment} />} */}
             </Box>
-            {articleDetail && <CommentInput article={articleDetail} setListComment={setListComment} />}
+            {/* {articleDetail && <CommentInput article={articleDetail} setListComment={setListComment} />} */}
         </Modal>
     );
 }

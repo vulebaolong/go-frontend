@@ -1,3 +1,4 @@
+import { TArticleLike } from "./article-like.type";
 import { TBaseTimestamps } from "./base.type";
 import { TUser } from "./user.type";
 
@@ -13,5 +14,6 @@ export type TArticle = {
     updatedAt: string;
     edges: {
         Users: TUser;
+        ArticleLikes?: TArticleLike[];
     };
 } & TBaseTimestamps;
