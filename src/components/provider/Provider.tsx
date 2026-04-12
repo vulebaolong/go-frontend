@@ -2,8 +2,8 @@
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/tiptap/styles.css";
-import "../../styles/animation.css";
 import "../../styles/global.css";
+import "../../styles/animation.css";
 
 import { useHotkeys } from "@mantine/hooks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

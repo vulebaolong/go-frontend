@@ -9,6 +9,7 @@ import { Dispatch, Fragment, SetStateAction } from "react";
 import { toast } from "react-toastify";
 import Avatar from "../avatar/Avatar";
 import UserMenuItem from "./UserMenuItem";
+import UserTheme from "./user-theme";
 
 type TProps = {
     setOpened?: Dispatch<SetStateAction<boolean>>;
@@ -55,7 +56,10 @@ export default function UserMenuLoginYes({ onClick }: TProps) {
                 </Stack>
             </Group>
 
+            <Divider />
             <Stack gap={2}>
+                <UserTheme />
+
                 {listMenu.map((item, i) => {
                     if (item.label === "Admin" && info?.roleId !== USER_ADMIN) return null;
                     return (

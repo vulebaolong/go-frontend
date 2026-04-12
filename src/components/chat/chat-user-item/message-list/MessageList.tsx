@@ -32,6 +32,9 @@ export default function MessageList({ stateChat, dataSendMessage }: TProps) {
 
     const user = useAppSelector((state) => state.user.info);
 
+    const getSenderId = (message: TAllmessage) => String(message.senderId ?? "");
+    const getMessageText = (message: TAllmessage) => String((message as any).messageText ?? (message as any).message ?? "");
+
     const chatMessage = useGetChatMessage({
         pagination: { pageIndex: page, pageSize: 10 },
         filters: { chatGroupId: stateChat.chatGroupId },
@@ -69,7 +72,7 @@ export default function MessageList({ stateChat, dataSendMessage }: TProps) {
         if (!dataSendMessage?.chatGroupId) return;
 
         // 👉 Nếu bạn gửi => luôn scroll
-        if (dataSendMessage.senderId === user?.id) {
+        if (getSenderId(dataSendMessage) === String(user?.id ?? "")) {
             shouldScrollRef.current = true;
         }
         // 👉 Nếu người khác gửi và bạn đang ở cuối => scroll
@@ -119,17 +122,21 @@ export default function MessageList({ stateChat, dataSendMessage }: TProps) {
                 firstItemIndex={firstItemIndex}
                 style={{ height: "100%" }}
                 itemContent={(index, messageItem: TAllmessage) => {
-                    const userRecipient = stateChat.chatGroupMembers.find((member) => member.userId === messageItem.senderId);
+                    const senderId = getSenderId(messageItem);
+                    const isSender = senderId === String(user?.id ?? "");
+                    const userRecipient = stateChat.chatGroupMembers.find((member) => String(member.userId) === senderId);
+                    const messageText = getMessageText(messageItem);
+
                     return (
                         <Fragment key={index}>
-                            {messageItem.senderId === user?.id ? (
+                            {isSender ? (
                                 <SenderMessageItem
                                     messageItem={{
                                         avatar: user?.avatar,
-                                        message: messageItem.messageText,
+                                        message: messageText,
                                         createdAt: messageItem.createdAt || "",
-                                        userId: messageItem.senderId,
-                                        roleId: user.roleId || "",
+                                        userId: Number(senderId),
+                                        roleId: user?.roleId || "",
                                         fullName: user?.fullName,
                                     }}
                                 />
@@ -138,7 +145,7 @@ export default function MessageList({ stateChat, dataSendMessage }: TProps) {
                                     messageItem={{
                                         avatar: userRecipient?.avatar,
                                         fullName: userRecipient?.fullName,
-                                        message: messageItem.messageText,
+                                        message: messageText,
                                         createdAt: messageItem.createdAt || "",
                                         userId: userRecipient?.userId || 0,
                                         roleId: userRecipient?.roleId || "",
