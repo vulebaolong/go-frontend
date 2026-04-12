@@ -46,6 +46,8 @@ type AppendLoadingProps = {
 
     /** callback khi chạm sentinel */
     onLoadMore?: () => void;
+    /** đã đạt tới trang cuối, không observer load thêm nữa */
+    isEnd?: boolean;
 
     /**
      * scroll container làm root cho IntersectionObserver.
@@ -76,6 +78,7 @@ export function AppendLoading({
     children,
     appendSide = "bottom",
     onLoadMore,
+    isEnd: isEndProp,
     containerRef,
     threshold = 0.1,
     rootMargin = "0px",
@@ -91,7 +94,7 @@ export function AppendLoading({
     const useButton = !!loadMoreButton?.enabled;
     const label = loadMoreButton?.label ?? "Load more";
     const hideWhenMax = loadMoreButton?.hideWhenMax ?? true;
-    const isEnd = loadMoreButton?.isEnd ?? false;
+    const isEnd = isEndProp ?? loadMoreButton?.isEnd ?? false;
     const classNameButton = loadMoreButton?.classNameButton;
 
     if (debug) {
@@ -101,6 +104,7 @@ export function AppendLoading({
     // Observer cho sentinel
     useEffect(() => {
         if (useButton) return; // nếu dùng button thì không observer
+        if (isLoading || isError || isEnd) return;
 
         const rootEl = containerRef?.current;
         const target = sentinelRef.current;
@@ -118,7 +122,7 @@ export function AppendLoading({
 
         observer.observe(target);
         return () => observer.disconnect();
-    }, [appendSide, onLoadMore, containerRef, rootMargin, threshold, debug]);
+    }, [appendSide, onLoadMore, containerRef, rootMargin, threshold, debug, isLoading, isError, isEnd, useButton]);
 
     // 1) lần đầu: chỉ hiển thị loader initial
     if (showInitialLoading) {
@@ -153,7 +157,7 @@ export function AppendLoading({
             {appendSide === "top" && (
                 <>
                     {showEdgeLoading && TopLoader}
-                    {!useButton && <div ref={sentinelRef} style={{ backgroundColor: debug ? "red" : "transparent" }} aria-hidden />}
+                    {!useButton && !isEnd && <div ref={sentinelRef} style={{ backgroundColor: debug ? "red" : "transparent" }} aria-hidden />}
                     {useButton && LoadMoreButton}
                 </>
             )}
@@ -164,7 +168,7 @@ export function AppendLoading({
             {appendSide === "bottom" && (
                 <>
                     {showEdgeLoading && BottomLoader}
-                    {!useButton && <div ref={sentinelRef} style={{ backgroundColor: debug ? "red" : "transparent", height: "2px" }} aria-hidden />}
+                    {!useButton && !isEnd && <div ref={sentinelRef} style={{ backgroundColor: debug ? "red" : "transparent", height: "2px" }} aria-hidden />}
                     {useButton && LoadMoreButton}
                 </>
             )}

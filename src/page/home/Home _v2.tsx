@@ -19,9 +19,6 @@ import { toast } from "react-toastify";
 import { VirtuosoGrid, VirtuosoGridHandle } from "react-virtuoso";
 import classes from "./HomeV2.module.css";
 
-function getArticleAuthor(article: TArticle) {
-    return article.edges.Users || article.edges.user;
-}
 
 function getArticleTitle(article: TArticle) {
     const fallbackTitle = article.content?.split("\n").find(Boolean)?.trim();

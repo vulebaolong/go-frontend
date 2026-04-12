@@ -119,7 +119,7 @@ export default function ButtonsFriend({ detailUser }: Props) {
 
         const accessToken = await getAccessToken();
 
-        const payload: TCreateRoomReq = { targetUserIds: [detailUser.id], accessToken: accessToken || "" };
+        const payload: TCreateRoomReq = { targetUserIds: [String(detailUser.id)], accessToken: accessToken || "" };
 
         emitToEvent(socket, SOCKET_CHAT_MES.CREATE_ROOM, payload, (data: TSocketRes<TCreateRoomRes>) => {
             try {
@@ -147,6 +147,7 @@ export default function ButtonsFriend({ detailUser }: Props) {
                         ],
                     },
                     () => {
+                        queryClient.invalidateQueries({ queryKey: [`chat-group-list`] });
                         queryClient.invalidateQueries({ queryKey: [`chat-list-user-item`] });
                         queryClient.invalidateQueries({ queryKey: [`chat-list-user-bubble`] });
                     },

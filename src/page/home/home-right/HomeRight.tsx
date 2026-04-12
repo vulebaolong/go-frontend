@@ -1,28 +1,23 @@
 "use client";
 
 import { useFindAllChatGroup } from "@/api/tantask/user.tanstack";
-import Avatar from "@/components/avatar/Avatar";
+import AvatarChatGroup from "@/components/chat/chat-user-item/avatar-chat-group/AvatarChatGroup";
 import ModalCreateChatGroup from "@/components/modal/modal-create-chat-group/ModalCreateChatGroup";
 import NodataOverlay from "@/components/no-data/NodataOverlay";
 import ChatGroupSkeleton from "@/components/skeletons/ChatGroupSkeleton";
-import TagUser from "@/components/tag-user/TagUser";
-import { addChatOpened } from "@/helpers/chat.helper";
+import { addChatOpened, buildStateChatFromChatGroup } from "@/helpers/chat.helper";
 import { animationList } from "@/helpers/function.helper";
-import { useAppSelector } from "@/redux/hooks";
 import { TChatGroup } from "@/types/chat.type";
 import { Box, Group, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Fragment } from "react";
 
 type TProps = {
     onClose?: () => void;
 };
 
 export default function HomeRight({ onClose }: TProps) {
-    const userId = useAppSelector((state) => state.user.info?.id);
-
     const findAllChatGroup = useFindAllChatGroup({
         pagination: { page: 1, pageSize: 9999 },
         filters: {},
@@ -34,16 +29,7 @@ export default function HomeRight({ onClose }: TProps) {
     const handleClickChatGroup = (chatGroup: TChatGroup) => {
         if (onClose) onClose();
         addChatOpened(
-            {
-                chatGroupId: chatGroup.id,
-                chatGroupName: chatGroup.name || "",
-                chatGroupMembers: chatGroup.edges.ChatGroupMembers.map((member) => ({
-                    avatar: member.edges.Users.avatar,
-                    fullName: member.edges.Users.fullName,
-                    roleId: member.edges.Users.roleId,
-                    userId: member.edges.Users.id,
-                })),
-            },
+            buildStateChatFromChatGroup(chatGroup),
             () => {
                 queryClient.invalidateQueries({ queryKey: [`chat-list-user-item`] });
                 queryClient.invalidateQueries({ queryKey: [`chat-list-user-bubble`] });
@@ -111,62 +97,11 @@ export default function HomeRight({ onClose }: TProps) {
                         }
                     />
                     {(findAllChatGroup.data?.items || []).map((chatGroup, i) => {
-                        const user = (chatGroup.edges?.ChatGroupMembers || []).find((user) => user.userId !== userId);
-                        // console.log(user);
-                        if (!user) return <Fragment key={i}></Fragment>;
+                        const stateChat = buildStateChatFromChatGroup(chatGroup);
 
-                        if ((chatGroup.edges?.ChatGroupMembers?.length ?? 0) > 2) {
-                            return (
-                                <Box
-                                    key={i}
-                                    onClick={() => {
-                                        handleClickChatGroup(chatGroup);
-                                    }}
-                                    sx={{
-                                        cursor: "pointer",
-                                        ...animationList(i),
-                                        "&:hover": { backgroundColor: `var(--mantine-color-gray-light-hover)` },
-                                        transition: `background-color 0.2s ease`,
-                                        padding: `5px`,
-                                        borderRadius: `10px`,
-                                    }}
-                                >
-                                    <Group wrap="nowrap" gap={5}>
-                                        <Box sx={{ width: `38px`, height: `38px`, position: `relative`, flexShrink: 0 }}>
-                                            {chatGroup.edges.ChatGroupMembers.slice(0, 2).map((member, i) => {
-                                                if (i === 0) {
-                                                    return (
-                                                        <Box key={i} sx={{ position: `absolute`, bottom: 0, left: 0, zIndex: 2 }}>
-                                                            <Avatar
-                                                                size={`sm`}
-                                                                fullName={member.edges.Users.fullName}
-                                                                avatar={member.edges.Users.avatar}
-                                                                radius="xl"
-                                                            />
-                                                        </Box>
-                                                    );
-                                                } else {
-                                                    return (
-                                                        <Box key={i} sx={{ position: `absolute`, top: 0, right: 0, zIndex: 1 }}>
-                                                            <Avatar
-                                                                size={`sm`}
-                                                                fullName={member.edges.Users.fullName}
-                                                                avatar={member.edges.Users.avatar}
-                                                                radius="xl"
-                                                            />
-                                                        </Box>
-                                                    );
-                                                }
-                                            })}
-                                        </Box>
-                                        <Text truncate>{chatGroup.name}</Text>
-                                    </Group>
-                                </Box>
-                            );
-                        }
                         return (
                             <Box
-                                key={i}
+                                key={chatGroup.id}
                                 onClick={() => {
                                     handleClickChatGroup(chatGroup);
                                 }}
@@ -179,7 +114,7 @@ export default function HomeRight({ onClose }: TProps) {
                                     borderRadius: `10px`,
                                 }}
                             >
-                                <TagUser fullName={user.edges.Users?.fullName} avatar={user.edges.Users?.avatar} />
+                                <AvatarChatGroup stateChat={stateChat} isTextName />
                             </Box>
                         );
                     })}

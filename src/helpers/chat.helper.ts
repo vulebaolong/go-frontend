@@ -1,5 +1,5 @@
 import { CHAT_BUBBLE, CHAT_OPENED } from "@/constant/chat.constant";
-import { TStateChat } from "@/types/chat.type";
+import { TChatGroup, TStateChat } from "@/types/chat.type";
 import _ from "lodash";
 import { logWithColor } from "./function.helper";
 
@@ -61,6 +61,19 @@ export const openChatFromBuble = (stateChat: TStateChat, onSuccess?: () => void)
    removeChatOpened(stateChat, CHAT_BUBBLE);
    addChatOpened(stateChat);
    if (onSuccess) onSuccess();
+};
+
+export const buildStateChatFromChatGroup = (chatGroup: TChatGroup): TStateChat => {
+   return {
+      chatGroupId: chatGroup.id,
+      chatGroupName: chatGroup.name || "",
+      chatGroupMembers: (chatGroup.edges?.ChatGroupMembers || []).map((member) => ({
+         avatar: member.edges.Users.avatar,
+         fullName: member.edges.Users.fullName,
+         roleId: member.edges.Users.roleId,
+         userId: member.edges.Users.id,
+      })),
+   };
 };
 
 export function listenToEvent(socket: any, eventName: string, callback: (...args: any[]) => void) {

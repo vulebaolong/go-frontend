@@ -1,22 +1,17 @@
 import { TBaseTimestamps } from "./base.type";
-import { TReactionType } from "./reactioin.type";
 import { TUser } from "./user.type";
 
 export type TArticle = {
-    id: string;
+    id: number;
     title?: string;
     content: string;
     imageUrl: string;
-    viewCount: number;
-    commentCount: number;
-    likeCount?: number;
-    dislikeCount?: number;
-    angryCount?: number;
-    userId: string;
-    isPublish: boolean;
+    likeCount: number;
+    views: number;
+    userId: number;
+    createdAt: string;
+    updatedAt: string;
     edges: {
         Users: TUser;
-        user?: TUser;
     };
-    reaction: TReactionType | null;
 } & TBaseTimestamps;

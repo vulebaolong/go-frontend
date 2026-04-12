@@ -22,8 +22,10 @@ export default function UserMenuItem({ item, onClick }: TProps) {
    return (
       <Group
          onClick={onClick}
+         gap={"xs"}
+         px={"sm"}
          sx={{
-            padding: `0px 10px`,
+            // padding: `0px 10px`,
             height: `36px`,
             borderRadius: `10px`,
             "&:hover": { backgroundColor: `var(--mantine-color-gray-light-hover)` },

@@ -63,7 +63,7 @@ export default function ModalCreateChatGroup({ opened, close }: TProps) {
         if (chatGroupName.trim() === "") return toast.warning("Vui lòng nhập tên nhóm");
         if (userSelected.length < 2) return toast.warning("Vui lòng chọn ít nhất 2 người");
 
-        const targetUserIds = userSelected.map((u) => u.id);
+        const targetUserIds = userSelected.map((u) => String(u.id));
         setLoading(true);
 
         const accessToken = await getAccessToken();
@@ -201,7 +201,7 @@ export default function ModalCreateChatGroup({ opened, close }: TProps) {
                     <Button variant="default" onClick={close}>
                         Đóng
                     </Button>
-                    <Button onClick={handleCreateChatGroup} loading={loading} disabled={!chatGroupName || userSelected.length === 0}>
+                    <Button onClick={handleCreateChatGroup} loading={loading} disabled={!chatGroupName || userSelected.length < 2}>
                         Tạo nhóm
                     </Button>
                 </Group>

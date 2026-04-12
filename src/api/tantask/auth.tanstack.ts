@@ -23,8 +23,9 @@ export const useGetInfoMutation = () => {
             try {
                 const { data, status, message } = await getInfoAction();
                 if (status === "error" || data === null) throw new Error(message);
-                console.log({ useGetInfoMutation: data });
-                dispatch(SET_INFO(data));
+                const payload = { ...data.user, isTotp: data.isTotp };
+                console.log({ useGetInfoMutation: payload });
+                dispatch(SET_INFO(payload));
                 return true;
             } catch (error) {
                 throw error;
@@ -42,8 +43,9 @@ export const useGetInfoQuery = () => {
             try {
                 const { data, status, message } = await getInfoAction();
                 if (status === "error" || data === null) throw new Error(message);
-                console.log({ useGetInfoQuery: data });
-                dispatch(SET_INFO(data));
+                const payload = { ...data.user, isTotp: data.isTotp };
+                console.log({ useGetInfoQuery: payload });
+                dispatch(SET_INFO(payload));
                 return data;
             } catch (error) {
                 console.log(error);

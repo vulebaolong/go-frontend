@@ -166,7 +166,7 @@ export default function SettingTwoFactor() {
                                                 height="200px"
                                                 paddingImageCenter={`5px`}
                                                 isPending={totpGenerate.isPending}
-                                                qr={totpGenerate.data.qrCode}
+                                                qr={`data:image/png;base64,${totpGenerate.data.qrCode}`}
                                                 srcImageCenter={`/images/logo/logo-512x512.png`}
                                              />
                                           )}

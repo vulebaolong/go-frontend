@@ -24,7 +24,7 @@ export type TMessageItem = {
 };
 
 export type TStateChat = {
-    chatGroupId: string;
+    chatGroupId: number;
     chatGroupName: string;
     chatGroupMembers: TStateChatMember[];
 };
@@ -36,9 +36,9 @@ export type TStateChatMember = {
 };
 
 export type TChatGroup = {
-    id: string;
+    id: number;
     name?: string;
-    ownerId: string;
+    ownerId: number;
     edges: {
         ChatGroupMembers: TChatGroupMember[];
         Users: TUser;
@@ -46,9 +46,9 @@ export type TChatGroup = {
 } & TBaseTimestamps;
 
 export type TChatGroupMember = {
-    id: string;
+    id: number;
     userId: number;
-    chatGroupId: string;
+    chatGroupId: number;
     edges: {
         Users: TUser;
     };
@@ -57,30 +57,30 @@ export type TChatGroupMember = {
 } & TBaseTimestamps;
 
 export type TCreateRoomRes = {
-    chatGroupId: string;
+    chatGroupId: number;
 };
 
 export type TCreateRoomReq = {
     accessToken: string;
-    targetUserIds: string[];
+    targetUserIds: number[];
     name?: string;
 };
 
 export type TSendMessageReq = {
     message: string;
     accessToken: string;
-    chatGroupId: string;
+    chatGroupId: number;
 };
 
 export type TJoinRoomReq = {
-    chatGroupId: string;
+    chatGroupId: number;
     accessToken: string;
 };
 
 export type TJoinRoomRes = {
-    chatGroupId: string;
+    chatGroupId: number;
 };
 
 export type TLeaveRoomReq = {
-    chatGroupId: string;
+    chatGroupId: number;
 };
