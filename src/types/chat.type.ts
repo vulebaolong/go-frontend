@@ -47,7 +47,7 @@ export type TChatGroup = {
 
 export type TChatGroupMember = {
     id: string;
-    userId: string;
+    userId: number;
     chatGroupId: string;
     edges: {
         Users: TUser;
