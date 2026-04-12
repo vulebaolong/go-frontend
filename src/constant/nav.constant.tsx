@@ -12,7 +12,7 @@ export const ICON_SIZE = 20;
 
 export const NAV_ITEMS: NavConfigItem[] = [
     {
-        label: "Dashboard",
+        label: "Home",
         icon: <IconDashboard size={ICON_SIZE} />,
         href: ROUTER_CLIENT.HOME,
     },
