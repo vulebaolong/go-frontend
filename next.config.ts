@@ -36,6 +36,12 @@ const nextConfig: NextConfig = {
     compilerOptions: {
         incremental: false,
     },
+    webpack: (config, { dev }) => {
+        if (!dev) {
+            config.cache = false;
+        }
+        return config;
+    },
     devIndicators: {
         appIsrStatus: false,
     },
