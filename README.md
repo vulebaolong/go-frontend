@@ -9,4 +9,4 @@ zip -r source.zip . \
      ".env*" \
      ".env.prod" \
      ".idea" \
-     "*.log"
+     "*.log"# go-frontend
