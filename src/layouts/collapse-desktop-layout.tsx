@@ -2,9 +2,8 @@
 
 import Header from "@/components/header/header-client/HeaderClient_v2";
 import Nav from "@/components/nav/nav";
-import { AppShell, Container, Divider } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useParams } from "next/navigation";
 import { ReactNode } from "react";
 
 type TProps = {
@@ -37,7 +36,7 @@ export function CollapseDesktopLayout({ children }: TProps) {
                 <Header toggleMobile={toggleMobile} />
 
                 {/* <Container size={"xl"} py={"xl"}> */}
-                    {children}
+                {children}
                 {/* </Container> */}
             </AppShell.Main>
         </AppShell>

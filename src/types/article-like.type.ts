@@ -6,5 +6,5 @@ export type TArticleLike = {
     userId: number;
     createdAt: string;
     updatedAt: string;
-    edges: {};
+    // edges: {};
 } & TBaseTimestamps;

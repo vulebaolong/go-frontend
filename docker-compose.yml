@@ -1,7 +1,7 @@
 services:
   fe:
-    container_name: con-node_fe
-    image: vulebaolong/img-node_fe:latest
+    container_name: con-go_frontend
+    image: img-go_frontend:latest
     ports:
       - 3001:3000
     env_file:

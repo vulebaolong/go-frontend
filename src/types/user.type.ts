@@ -19,6 +19,6 @@ export type TUploadAvatarLocalRes = {
 };
 
 export type TEditProfileReq = {
-   id: string;
+   id: number;
    fullName: string;
 };

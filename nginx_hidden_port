@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name fe-node.vulebaolong.com;
+    server_name golang.vulebaolong.com;
     return 301 https://$host$request_uri;
 }
 
@@ -9,10 +9,10 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
-    server_name fe-node.vulebaolong.com;   
+    server_name golang.vulebaolong.com;   
 
-    ssl_certificate     /etc/ssl/cf-origin/vulebaolong.com.pem; 
-    ssl_certificate_key /etc/ssl/cf-origin/vulebaolong.com.key;
+    ssl_certificate     /etc/ssl/cf-origin/vulebaolong_ssl_certificate.pem;
+    ssl_certificate_key /etc/ssl/cf-origin/vulebaolong_ssl_certificate_key.pem;
 
     location / {
         proxy_pass http://127.0.0.1:3001;

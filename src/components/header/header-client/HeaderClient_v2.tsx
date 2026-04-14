@@ -1,9 +1,7 @@
 "use client";
 
-import { Logo } from "@/components/logo/Logo";
 import UserControl from "@/components/user-control/UserControl";
 import { ActionIcon, Box, Button, Divider, Group, Text } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { IconLayoutSidebarLeftCollapse, IconSearch } from "@tabler/icons-react";
 
 type TProps = {
@@ -11,7 +9,7 @@ type TProps = {
 };
 
 export default function Header({ toggleMobile }: TProps) {
-    const [openedSearchUser, handleSearchUser] = useDisclosure(false);
+    // const [openedSearchUser, handleSearchUser] = useDisclosure(false);
 
     return (
         <Box
@@ -30,7 +28,7 @@ export default function Header({ toggleMobile }: TProps) {
                     </ActionIcon>
                     <Group>
                         <Button
-                            onClick={handleSearchUser.open}
+                            // onClick={handleSearchUser.open}
                             c={"dimmed"}
                             leftSection={<IconSearch size={16} />}
                             variant="default"

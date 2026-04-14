@@ -63,7 +63,7 @@ export default function ModalCreateChatGroup({ opened, close }: TProps) {
         if (chatGroupName.trim() === "") return toast.warning("Vui lòng nhập tên nhóm");
         if (userSelected.length < 2) return toast.warning("Vui lòng chọn ít nhất 2 người");
 
-        const targetUserIds = userSelected.map((u) => String(u.id));
+        const targetUserIds = userSelected.map((u) => u.id);
         setLoading(true);
 
         const accessToken = await getAccessToken();

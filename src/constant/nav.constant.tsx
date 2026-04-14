@@ -1,4 +1,4 @@
-import { IconDashboard, IconDatabaseImport, IconDimensions, IconFlare, IconMessage, IconNews, IconReportAnalytics, IconTags, IconUpload } from "@tabler/icons-react";
+import { IconDashboard, IconMessage, IconNews } from "@tabler/icons-react";
 import { ROUTER_CLIENT } from "./router.constant";
 
 export type NavConfigItem = {
