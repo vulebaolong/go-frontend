@@ -61,6 +61,7 @@ export default function GetDemo() {
                             }}
                         >
                             <Text>{item.id}</Text>
+                            <Text>{item.title}</Text>
                             <Text>{item.content}</Text>
                             <Text>{item.views}</Text>
                             {/* <Text>{formatLocalTime(item.createdAt)}</Text> */}
