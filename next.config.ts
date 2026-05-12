@@ -33,9 +33,9 @@ const nextConfig: NextConfig = {
             bodySizeLimit: "2mb",
         },
     },
-    compilerOptions: {
-        incremental: false,
-    },
+    // compilerOptions: {
+    //     incremental: false,
+    // },
     webpack: (config, { dev }) => {
         if (!dev) {
             config.cache = false;
