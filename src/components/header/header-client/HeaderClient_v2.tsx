@@ -22,7 +22,7 @@ export default function Header({ toggleMobile }: TProps) {
                 sx={{
                     position: "sticky",
                     top: "0",
-                    zIndex: 300,
+                    zIndex: 100,
                     backgroundColor: "var(--mantine-color-body)",
                 }}
             >

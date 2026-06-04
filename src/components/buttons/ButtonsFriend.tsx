@@ -1,4 +1,5 @@
 import { SOCKET_CHAT_MES } from "@/constant/chat.constant";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { addChatOpened, emitToEvent, listenToEvent, removeEventListener } from "@/helpers/chat.helper";
 import { getAccessToken } from "@/helpers/cookies.helper";
 import { resError } from "@/helpers/function.helper";
@@ -9,6 +10,7 @@ import { TCreateRoomReq, TCreateRoomRes } from "@/types/chat.type";
 import { TUser } from "@/types/user.type";
 import { Button, Group } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -97,6 +99,7 @@ export default function ButtonsFriend({ detailUser }: Props) {
     const { socket } = useSocket();
     const [loading, setLoading] = useState(false);
     const info = useAppSelector((state) => state.user.info);
+    const router = useRouter();
 
     const queryClient = useQueryClient();
     // const friendStatus = useFriendStatus();
@@ -150,6 +153,7 @@ export default function ButtonsFriend({ detailUser }: Props) {
                         queryClient.invalidateQueries({ queryKey: [`chat-group-list`] });
                         queryClient.invalidateQueries({ queryKey: [`chat-list-user-item`] });
                         queryClient.invalidateQueries({ queryKey: [`chat-list-user-bubble`] });
+                        router.push(ROUTER_CLIENT.CHAT);
                     },
                 );
             } catch (error) {
