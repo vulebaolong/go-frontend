@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 
 type TProps = {
    fullName?: string;
-   avatar?: string;
+   avatar?: string | null;
 } & AvatarProps;
 
 const Avatar = forwardRef<HTMLDivElement, TProps & React.ComponentPropsWithoutRef<"div">>(({ fullName, avatar, ...props }, ref) => {

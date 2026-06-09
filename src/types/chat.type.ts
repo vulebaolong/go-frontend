@@ -4,19 +4,22 @@ import { TUser } from "./user.type";
 export type TAllmessage = {
     id: number;
     chatGroupId: number;
-    senderId: number;
+    senderId?: number;
+    userId?: number;
     messageText: string;
-    createdAt: string;
-    updatedAt: string;
-    edges: {
-        ChatGroups: TChatGroup;
-        Users: TUser;
+    createdAt?: string;
+    created_at?: string;
+    updatedAt?: string;
+    updated_at?: string;
+    edges?: {
+        ChatGroups?: TChatGroup;
+        Users?: TUser;
     };
 };
 
 export type TMessageItem = {
     message: string;
-    avatar: string | undefined;
+    avatar: string | null | undefined;
     fullName: string | undefined;
     userId: number;
     roleId: string;
@@ -31,7 +34,7 @@ export type TStateChat = {
 export type TStateChatMember = {
     userId: number;
     fullName: TUser["fullName"];
-    avatar: TUser["avatar"];
+    avatar: TUser["avatar"] | null;
     roleId: string;
 };
 
